@@ -1,8 +1,16 @@
+const express = require("express");
+const app = express();
 const User = require("../models/User.js");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+require('dotenv').config()
 
+const privatekey = process.env.PRIVATE_KEY;
+console.log("private key",privatekey)
+// middleware
+app.use(cookieParser());
 
 exports.addUser = async (req, res) => {
-  console.log("req.body", req.body);
   const { email, password } = req.body;
   const newUser = new User({
     email: email,
@@ -17,7 +25,43 @@ exports.addUser = async (req, res) => {
       res.status(400).json({ message: "User already exists." });
     } else {
       console.log(error);
-      res.status(400).json({ message: error });
+      res.status(500).json(`Server Error:${error}`);
     }
+  }
+};
+
+exports.login = async (req, res) => {
+  console.log("req.body", req.body);
+  const { email, password } = req.body;
+  const user = await User.findOne({ email, password }).exec();
+  console.log("user",user)
+  try {
+    if (!user) {
+      // User not found
+      return res.status(400).json({ message: "Invalid login credentials." });
+    } else {
+      jwt.sign({ email, id: user._id }, privatekey, {}, (error, token) => {
+        if (error) {
+          throw error;
+
+        } else {
+            console.log("token before",token)
+
+          res
+            .cookie("token", token, {
+              sameSite: "none",
+              secure: true,
+            })
+            .json({
+              id: user._id,
+              email,
+            });
+            console.log("token after",token)
+
+        }
+      });
+    }
+  } catch (error) {
+    return res.status(500).json(`Server Error: ${error}`);
   }
 };
