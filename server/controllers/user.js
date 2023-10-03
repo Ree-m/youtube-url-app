@@ -3,10 +3,11 @@ const app = express();
 const User = require("../models/User.js");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-require('dotenv').config()
+require("dotenv").config();
 
 const privatekey = process.env.PRIVATE_KEY;
-console.log("private key",privatekey)
+console.log("private key", privatekey);
+
 // middleware
 app.use(cookieParser());
 
@@ -34,7 +35,7 @@ exports.login = async (req, res) => {
   console.log("req.body", req.body);
   const { email, password } = req.body;
   const user = await User.findOne({ email, password }).exec();
-  console.log("user",user)
+  console.log("user", user);
   try {
     if (!user) {
       // User not found
@@ -43,9 +44,8 @@ exports.login = async (req, res) => {
       jwt.sign({ email, id: user._id }, privatekey, {}, (error, token) => {
         if (error) {
           throw error;
-
         } else {
-            console.log("token before",token)
+          console.log("token before", token);
 
           res
             .cookie("token", token, {
@@ -56,12 +56,28 @@ exports.login = async (req, res) => {
               id: user._id,
               email,
             });
-            console.log("token after",token)
-
+          console.log("token after", token);
         }
       });
     }
   } catch (error) {
+    console.log(error);
+    return res.status(500).json(`Server Error: ${error}`);
+  }
+};
+
+exports.getProfile = (req, res) => {
+  console.log("token", req.cookies);
+  try {
+    jwt.verify(req.cookies.token, privatekey, {}, (error, user) => {
+      if (error) {
+        console.log(error);
+        return res.status(400).json({ message: "Invalid token" });
+      }
+      res.json(user);
+    });
+  } catch (error) {
+    console.log(error);
     return res.status(500).json(`Server Error: ${error}`);
   }
 };
