@@ -18,7 +18,7 @@ const {url}=req.body
 
 exports.getAllVideos=async(req,res)=>{
     try{
-        const videos = await Video.find()
+        const videos = await Video.find().sort({createdAt:"desc"})
         return res.status(200).json(videos)
         
     }catch(error){
