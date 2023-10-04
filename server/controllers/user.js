@@ -81,3 +81,13 @@ exports.getProfile = (req, res) => {
     return res.status(500).json(`Server Error: ${error}`);
   }
 };
+
+exports.logout = async (req, res) => {
+  try {
+    console.log("logging out");
+   return res.cookie("token", "", { sameSite: "none", secure: true }).json("ok"); //sets "token" to empty/invalid
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(`Server Error: ${error}`);
+  }
+};
