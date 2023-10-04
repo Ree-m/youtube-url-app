@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react"
-
+interface Snippet{
+  title:string,
+  description:string
+}
 interface Video {
+  id:string,
+  snippet:Snippet
   title: string;
   description: string;
   userEmail: string;
@@ -45,11 +50,12 @@ const Home = () => {
 
         const response = await fetch(apiUrl);
         const data = await response.json()
-        const video = await data.items[0]?.snippet
+        console.log("uncut data", data)
+        const video = await data.items[0]
         if (video) {
           video.userEmail = userEmail; // Add userEmail to video object
           videosArr.push(video);
-          console.log("fetchVideInfo data", video.title);
+          console.log("fetchVideInfo data", video);
           console.log("fetchVideInfo videoarr", videosArr)
         }
 
@@ -74,9 +80,18 @@ const Home = () => {
       <h1>Home</h1>
       {videos && videos.map((video, index) => (
         <div key={index}>
-          <h2>{video.title}</h2>
+          <h2>{video.snippet.title}</h2>
           <p>User Email: {video.userEmail}</p>
-          <p>{video.description}</p>
+          <p>{video.snippet.description}</p>
+
+          <iframe
+            width="560"
+            height="315"
+            src={`https://www.youtube.com/embed/${video.id}`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+
 
         </div>
       ))}

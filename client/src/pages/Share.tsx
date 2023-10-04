@@ -5,7 +5,7 @@ const Share = () => {
   const [url, setUrl] = useState<string>("")
   const { user } = useContext(UserContext)
   const userId = user?.id
-const email=user?.email
+  const email = user?.email
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -16,13 +16,13 @@ const email=user?.email
 
     const response = await fetch("http://localhost:5000/video/share", {
       method: "POST",
-      body: JSON.stringify({  userId,email,url }),
+      body: JSON.stringify({ userId, email, url }),
       headers: { "Content-Type": "application/json" },
       credentials: "include",
 
     })
     const data = await response.json()
-    console.log("data", data,userId)
+    console.log("data", data, userId)
     setUrl("")
   }
   return (
