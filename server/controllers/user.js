@@ -67,14 +67,16 @@ exports.login = async (req, res) => {
 };
 
 exports.getProfile = (req, res) => {
-  console.log("token", req.cookies);
+  console.log("token profile before", req.cookies);
   try {
     jwt.verify(req.cookies.token, privatekey, {}, (error, user) => {
       if (error) {
         console.log(error);
         return res.status(400).json({ message: "Invalid token" });
       }
-      res.json(user);
+      console.log(" profile user", user);
+
+      return res.json(user);
     });
   } catch (error) {
     console.log(error);

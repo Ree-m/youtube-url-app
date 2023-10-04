@@ -2,9 +2,11 @@ const Video = require("../models/Video.js")
 
 
 exports.addVideo=async(req,res)=>{
-const {url}=req.body
+const {userId,email,url}=req.body
   const newVideo = new Video({
-    url: url,
+    userId,
+    email,
+    url
   });
   try {
     const newVideoToSave = await newVideo.save();

@@ -1,17 +1,34 @@
-import { useState, useContext, FormEvent } from "react"
-import { UserContext } from "./UserContext";
-// import { initialUserState } from "./UserContext";
-interface UserData {
-    id: string,
-    email: string
-}
+import { useState, FormEvent, useContext, useEffect } from "react"
+import { Link } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 const Header = () => {
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    // const { user, setUser } = useContext(UserContext);
-    const [user, setUser] = useState<UserData | null>(null)
+    const { user, setUser } = useContext(UserContext)
+
+
+
+    // useEffect(() => {
+    //     const fetchProfileData = async () => {
+    //         const response = await fetch("http://localhost:5000/user/profile", {
+    //             method: "GET",
+    //             credentials: "include", // Include cookies in the request
+    //         });
+
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             setUser(data);
+    //         } else {
+    //             console.log("error")
+    //         }
+    //     };
+
+    //     fetchProfileData();
+    // }, []);
 
     const handleSubmit = async (e: FormEvent) => {
+        console.log("user first", user)
+
         e.preventDefault()
         const response = await fetch("http://localhost:5000/user/login", {
             method: "POST",
@@ -20,12 +37,17 @@ const Header = () => {
             credentials: "include",
 
         })
-        const data = await response.json()
-        setUser(data)
-        setEmail("")
-        setPassword("")
-        console.log("data", data)
-        console.log("user", user)
+        if (response.ok) {
+            const data = await response.json()
+            setUser(data)
+            setEmail("")
+            setPassword("")
+            console.log("data", data)
+            console.log("user last", user)
+        } else {
+            console.log("error")
+        }
+
     }
     const handleLogout = async () => {
         console.log("before logout", user)
@@ -36,14 +58,14 @@ const Header = () => {
             credentials: "include",
 
         })
-        setUser(null)
+        setUser({ email: "", id: "" })
         console.log("logout", user)
 
     }
-    if (!user) {
+    if (user.id === "" && user.email === "") {
         return (
             <div>
-                <h1>Funny Movies</h1>
+                <Link to={"/"}><h1>Funny Movies</h1></Link>
                 <form onSubmit={handleSubmit}>
                     <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -57,10 +79,10 @@ const Header = () => {
     else {
         return (
             <div>
-                <h1>Funny Movies</h1>
+                <Link to={"/"}><h1>Funny Movies</h1></Link>
                 <p>{user.email}</p>
-                <p>haha</p>
                 <button onClick={handleLogout}>Logout</button>
+                <Link to={"/share"}>Share a movie</Link>
 
             </div>
         )
