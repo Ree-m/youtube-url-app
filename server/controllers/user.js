@@ -23,10 +23,10 @@ exports.addUser = async (req, res) => {
   } catch (error) {
     if (error.code === 11000) {
       // Duplicate key error
-      res.status(400).json({ message: "User already exists." });
+      return res.status(400).json({ message: "User already exists." });
     } else {
       console.log(error);
-      res.status(500).json(`Server Error:${error}`);
+      return res.status(500).json(`Server Error:${error}`);
     }
   }
 };
@@ -47,16 +47,17 @@ exports.login = async (req, res) => {
         } else {
           console.log("token before", token);
 
-          res
+          return res
             .cookie("token", token, {
+              domain: "localhost",
               sameSite: "none",
               secure: true,
+              size: 192,
             })
             .json({
               id: user._id,
               email,
             });
-          console.log("token after", token);
         }
       });
     }
@@ -66,8 +67,8 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.getProfile = (req, res) => {
-  console.log("token profile before", req.cookies);
+exports.getProfile = async (req, res) => {
+  console.log("token profile before", req.cookies, req.cookie,req.cookies.token);
   try {
     jwt.verify(req.cookies.token, privatekey, {}, (error, user) => {
       if (error) {
@@ -87,7 +88,9 @@ exports.getProfile = (req, res) => {
 exports.logout = async (req, res) => {
   try {
     console.log("logging out");
-   return res.cookie("token", "", { sameSite: "none", secure: true }).json("ok"); //sets "token" to empty/invalid
+    return res
+      .cookie("token", "", { sameSite: "none", secure: true })
+      .json("ok"); //sets "token" to empty/invalid
   } catch (error) {
     console.log(error);
     return res.status(500).json(`Server Error: ${error}`);

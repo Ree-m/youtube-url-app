@@ -1,30 +1,32 @@
 import { useState, FormEvent, useContext, useEffect } from "react"
 import { Link } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
+import { AiFillHome, AiOutlineMenu } from "react-icons/ai";
+import styles from "../styles/header.module.css"
 const Header = () => {
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const { user, setUser } = useContext(UserContext)
+    const [toggelMenu, setToggleMenu] = useState<boolean>(false)
 
 
+    // useEffect(() => {
+    //     const fetchProfileData = async () => {
+    //         const response = await fetch("http://localhost:5000/user/profile", {
+    //             method: "GET",
+    //             credentials: "include", // Include cookies in the request
+    //         });
 
-    useEffect(() => {
-        const fetchProfileData = async () => {
-            const response = await fetch("http://localhost:5000/user/profile", {
-                method: "GET",
-                credentials: "include", // Include cookies in the request
-            });
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             setUser(data);
+    //         } else {
+    //             console.log("error")
+    //         }
+    //     };
 
-            if (response.ok) {
-                const data = await response.json();
-                setUser(data);
-            } else {
-                console.log("error")
-            }
-        };
-
-        fetchProfileData();
-    }, []);
+    //     fetchProfileData();
+    // }, []);
 
     const handleLogin = async (e: FormEvent) => {
         console.log("user first", user)
@@ -85,48 +87,70 @@ const Header = () => {
 
     }
 
+    const handleLogout = async () => {
+        console.log("before logout", user)
+
+        await fetch("http://localhost:5000/user/logout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+
+        })
+        setUser({ email: "", id: "" })
+        console.log("logout", user)
+
+    }
+    if (user.id === "" && user.email === "") {
+        return (
+            <div className={styles.header}>
+                <div className={styles.logo}>
+                    <i><AiFillHome /></i>
+                    <Link to={"/"}><h1>Funny Movies</h1></Link>
+                </div>
+                <form className={styles.form}>
+                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <button type="submit" onClick={handleLogin} className="button">Login</button>
+                    <button type="submit" onClick={handleSignUp} className="button">Register</button>
+
+                </form>
+                <i className={styles.menuIcon} onClick={() => setToggleMenu(!toggelMenu)}><AiOutlineMenu /></i>
+                {toggelMenu && <div className={styles.mobileMenu}>
+                    <form>
+                        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <button type="submit" onClick={handleLogin} className="button">Login</button>
+                        <button type="submit" onClick={handleSignUp} className="button">Register</button>
+
+                    </form>
+                </div>}
 
 
-const handleLogout = async () => {
-    console.log("before logout", user)
+            </div>
+        )
+    }
 
-    await fetch("http://localhost:5000/user/logout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+    else {
+        return (
+            <div className={styles.headerLoggedIn}>
 
-    })
-    setUser({ email: "", id: "" })
-    console.log("logout", user)
+                <div className={styles.logo}>
+                    <i><AiFillHome /></i>
+                    <Link to={"/"}><h1>Funny Movies</h1></Link>
+                </div>
 
-}
-if (user.id === "" && user.email === "") {
-    return (
-        <div>
-            <Link to={"/"}><h1>Funny Movies</h1></Link>
-            <form>
-                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button type="submit" onClick={handleLogin}>Login</button>
-                <button type="submit" onClick={handleSignUp}>Register</button>
+                <div className={styles.nav}>
+                    <Link to={"/share"} className="button">Share a movie</Link>
+                    <button onClick={handleLogout} className="button">{`Logout ${user.email}`}</button>
 
-            </form>
+                </div>
 
-        </div>
-    )
-}
+                
 
-else {
-    return (
-        <div>
-            <Link to={"/"}><h1>Funny Movies</h1></Link>
-            <p>{user.email}</p>
-            <button onClick={handleLogout}>Logout</button>
-            <Link to={"/share"}>Share a movie</Link>
 
-        </div>
-    )
-}
+            </div>
+        )
+    }
 
 }
 

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
-interface Snippet{
-  title:string,
-  description:string
+import styles from "../styles/home.module.css"
+interface Snippet {
+  title: string,
+  description: string
 }
 interface Video {
-  id:string,
-  snippet:Snippet
+  id: string,
+  snippet: Snippet
   title: string;
   description: string;
   userEmail: string;
@@ -76,21 +77,26 @@ const Home = () => {
   console.log("end videos", videos)
 
   return (
-    <div>
-      <h1>Home</h1>
+    <div className={styles.home}>
       {videos && videos.map((video, index) => (
-        <div key={index}>
-          <h2>{video.snippet.title}</h2>
-          <p>User Email: {video.userEmail}</p>
-          <p>{video.snippet.description}</p>
+        <div key={index} className={styles.videoItem}>
+          <div className={styles.videoContainer}>
+            <iframe
+              src={`https://www.youtube.com/embed/${video.id}`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
 
-          <iframe
-            width="560"
-            height="315"
-            src={`https://www.youtube.com/embed/${video.id}`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+          <div className={styles.videoInfo}>
+            <h2>{video.snippet.title}</h2>
+            <span>Shared by: {video.userEmail}</span>
+            <h4>Description:</h4>
+            <p>{video.snippet.description}</p>
+          </div>
+
+
+
 
 
         </div>

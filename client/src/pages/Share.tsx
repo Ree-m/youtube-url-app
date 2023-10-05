@@ -1,6 +1,6 @@
 import { useState, FormEvent, useContext } from "react"
 import { UserContext } from "../contexts/UserContext";
-
+import styles from "../styles/share.module.css"
 const Share = () => {
   const [url, setUrl] = useState<string>("")
   const { user } = useContext(UserContext)
@@ -26,13 +26,16 @@ const Share = () => {
     setUrl("")
   }
   return (
-    <div>
-      <h1>Share a youtube movie</h1>
+    <div className={styles.share}>
+      <h1>Share a YouTube video</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="">
-          <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} />
-        </label>
-        <button>Share</button>
+        <div>
+          <label htmlFor="url">YouTube Url: </label>
+          <input name="url" type="text" value={url} onChange={(e) => setUrl(e.target.value)} />
+        </div>
+        <div className={styles.buttonContainer}>
+          <button className="button">Share</button>
+        </div>
       </form>
 
     </div>
