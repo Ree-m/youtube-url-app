@@ -33,6 +33,14 @@
 
 }
 
+.green{
+    color:#4CAF50;
+}
+
+.red{
+    color:#FF5733;
+}
+
 @media(max-width:600px) {
     .share{
         padding: 30px;
