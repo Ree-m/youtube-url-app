@@ -31,7 +31,7 @@ exports.addUser = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+exports.login=async(req, res)=>{
   console.log("req.body", req.body);
   const { email, password } = req.body;
   const user = await User.findOne({ email, password }).exec();
@@ -49,10 +49,8 @@ exports.login = async (req, res) => {
 
           return res
             .cookie("token", token, {
-              domain: "localhost",
               sameSite: "none",
               secure: true,
-              size: 192,
             })
             .json({
               id: user._id,
@@ -68,7 +66,7 @@ exports.login = async (req, res) => {
 };
 
 exports.getProfile = async (req, res) => {
-  console.log("token profile before", req.cookies, req.cookie,req.cookies.token);
+  console.log("token profile before", req.cookies, req.cookie,req.cookies?.token);
   try {
     jwt.verify(req.cookies.token, privatekey, {}, (error, user) => {
       if (error) {
@@ -96,3 +94,4 @@ exports.logout = async (req, res) => {
     return res.status(500).json(`Server Error: ${error}`);
   }
 };
+

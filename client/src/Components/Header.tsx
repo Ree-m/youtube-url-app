@@ -3,36 +3,38 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { AiFillHome, AiOutlineMenu } from "react-icons/ai";
 import styles from "../styles/header.module.css"
+import { API_URL } from "../Constants";
+
 const Header = () => {
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const { user, setUser } = useContext(UserContext)
     const [toggelMenu, setToggleMenu] = useState<boolean>(false)
 
+console.log("api url",API_URL)
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            const response = await fetch(`${API_URL}/user/profile`, {
+                method: "GET",
+                credentials: "include", // Include cookies in the request
+            });
 
-    // useEffect(() => {
-    //     const fetchProfileData = async () => {
-    //         const response = await fetch("http://localhost:5000/user/profile", {
-    //             method: "GET",
-    //             credentials: "include", // Include cookies in the request
-    //         });
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data);
+            } else {
+                console.log("error")
+            }
+        };
 
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             setUser(data);
-    //         } else {
-    //             console.log("error")
-    //         }
-    //     };
-
-    //     fetchProfileData();
-    // }, []);
+        fetchProfileData();
+    }, []);
 
     const handleLogin = async (e: FormEvent) => {
         console.log("user first", user)
 
         e.preventDefault()
-        const response = await fetch("http://localhost:5000/user/login", {
+        const response = await fetch(`${API_URL}/user/login`, {
             method: "POST",
             body: JSON.stringify({ email, password }),
             headers: { "Content-Type": "application/json" },
@@ -58,7 +60,7 @@ const Header = () => {
         console.log("user first", user)
 
         e.preventDefault()
-        const response = await fetch("http://localhost:5000/user/add", {
+        const response = await fetch(`${API_URL}/user/add`, {
             method: "POST",
             body: JSON.stringify({ email, password }),
             headers: { "Content-Type": "application/json" },
@@ -90,7 +92,7 @@ const Header = () => {
     const handleLogout = async () => {
         console.log("before logout", user)
 
-        await fetch("http://localhost:5000/user/logout", {
+        await fetch(`${API_URL}/user/logout`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

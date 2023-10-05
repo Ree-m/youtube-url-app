@@ -11,6 +11,8 @@ interface Video {
   description: string;
   userEmail: string;
 }
+import { API_KEY } from "../Constants";
+import { API_URL } from "../Constants";
 
 const Home = () => {
   const [videos, setVideos] = useState<Video[]>([])
@@ -18,7 +20,7 @@ const Home = () => {
   // On component mount, fetch the video urls from the db
   useEffect(() => {
     const fetchVideosUrls = async () => {
-      const response = await fetch("http://localhost:5000/video")
+      const response = await fetch(`${API_URL}/video`)
 
       const data = await response.json()
       console.log("videoUrls data", data)
@@ -37,17 +39,16 @@ const Home = () => {
   }, [])
   const fetchVideosInfo = async (videoUrls: string[], userEmails: string[]) => {
     // YouTube Data API key
-    const apiKey = "";
 
     const videosArr: Video[] = [];
 
 
-    // Function to make a GET request to the YouTube API
+    // Function to make a request to the YouTube API
     const fetchVideoInfo = async (url: string, userEmail: string) => {
       try {
         const videoIdMatch = url.match(/[?&]v=([^&]+)/);
         const videoId = videoIdMatch ? videoIdMatch[1] : '';
-        const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${apiKey}&part=snippet`;
+        const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`;
 
         const response = await fetch(apiUrl);
         const data = await response.json()
@@ -94,10 +95,6 @@ const Home = () => {
             <h4>Description:</h4>
             <p>{video.snippet.description}</p>
           </div>
-
-
-
-
 
         </div>
       ))}

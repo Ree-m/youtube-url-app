@@ -1,6 +1,8 @@
 import { useState, FormEvent, useContext } from "react"
 import { UserContext } from "../contexts/UserContext";
 import styles from "../styles/share.module.css"
+import { API_URL } from "../Constants";
+
 const Share = () => {
   const [url, setUrl] = useState<string>("")
   const { user } = useContext(UserContext)
@@ -14,7 +16,7 @@ const Share = () => {
       return;
     }
 
-    const response = await fetch("http://localhost:5000/video/share", {
+    const response = await fetch(`${API_URL}/video/share`, {
       method: "POST",
       body: JSON.stringify({ userId, email, url }),
       headers: { "Content-Type": "application/json" },
