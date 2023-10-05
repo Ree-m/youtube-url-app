@@ -6,20 +6,21 @@ import { API_URL } from "../Constants";
 const Share = () => {
   const [url, setUrl] = useState<string>("")
   const [isUrlValid, setIsUrlValid] = useState<boolean>(false)
+  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
+
   const { user } = useContext(UserContext)
   const userId = user?.id
   const email = user?.email
 
+
   // On form submit, check if url is valid and then add to db
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!userId) {
-      console.error("User ID is missing.");
-      return;
-    }
+    setIsFormSubmitted(true)
+
+
     // if url is valid, add to db
     if (url.startsWith("https://www.youtube.com")) {
-      setIsUrlValid(true)
       const response = await fetch(`${API_URL}/video/share`, {
         method: "POST",
         body: JSON.stringify({ userId, email, url }),
@@ -29,14 +30,18 @@ const Share = () => {
       })
       const data = await response.json()
       console.log("data", data, userId)
+      setIsUrlValid(true)
       setUrl("")
+
     } else {
+      setIsFormSubmitted(true)
+
       setIsUrlValid(false)
       console.log("Url is not valid")
+
     }
 
   }
-
 
   return (
     <div className={styles.share}>
@@ -46,8 +51,9 @@ const Share = () => {
           <label htmlFor="url">YouTube Url: </label>
           <input name="url" type="text" value={url} onChange={(e) => setUrl(e.target.value)} />
         </div>
-        {!isUrlValid && <span className={styles.red}>Failed! The url is not valid.</span>}
-        {isUrlValid && <span className={styles.green}>Success!</span>}
+        {!isFormSubmitted ? <span></span>: isFormSubmitted && isUrlValid?  <span className={styles.green}>Success!</span>: <span className={styles.red}>Failed! The url is not valid.</span>}
+
+
 
         <div className={styles.buttonContainer}>
           <button className="button">Share</button>
