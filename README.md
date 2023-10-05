@@ -1,9 +1,7 @@
 <a name="readme-top"></a>
 
-
 <br />
 <div align="center">
-
 
   <h3 align="center">YouTube Url App</h3>
 
@@ -13,7 +11,7 @@
     <a href="https://github.com/Ree-m/youtube-url-app"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://skinology.vercel.app/">View Demo</a>
+    <a href="https://youtube-url-app.vercel.app/">View Demo</a>
     ·
     <a href="https://github.com/Ree-m/youtube-url-app/issues">Report Bug</a>
     ·
@@ -29,6 +27,8 @@
 
 [![YouTube Url App][product-screenshot]](https://github.com/Ree-m/youtube-url-app)
 
+YouTUbe Url App is a full-stack application built using TypeScript and React for the front-end and Express.js and MongoDB for the backend. It is an apllication where users can register and then share youtube videos using youtube urls. Users can then watch the shared videos.
+It is full responsive for different devices.
 
 ### Prerequisites
 
@@ -37,6 +37,10 @@
   npm install npm@latest -g
   ```
 - node
+
+- MongoDB atlas account
+
+- YouTube API KEY
 
 ## Installations & Configuration
 
@@ -77,15 +81,16 @@ VITE_API_KEY=
 VITE_BACKEND_API_URL=
 
 ```
+
 Go to your google cloud console and get the API_KEY.
 
 ## DataBase Setup
 
 - Go to MongoDB atlas
-- Creat a new project
+- Create a new project
 - Create a databse in your project
-- Click on the "connect" button and thn on the "MongoDB for VS Code"
-- Copy your databse string and add it to .env
+- Click on the "connect" button and then on the "MongoDB for VS Code"
+- Copy your database string and add it to .env
 
 ## Running the application
 
@@ -108,36 +113,27 @@ npm run start
 - [![MongoDB][mongodb]][mongodb-url]
 - [![JsonWebTokens][jwt]][jwt-url]
 
-
 ## Live Demo
 
 [Live Demo](https://youtube-url-app.vercel.app/)
 
-
 ### Demo Account
 
- email: test@test.com password: test123 
-
+email: test@test.com password: test123
 
 <!-- USAGE EXAMPLES -->
 
 ## Usage
 
-
 Users can signup.
-<img src="" alt="Image of signup form" />
+<img src="client/src/screenshots/youtube-url-home.jpg" alt="Image of signup form" />
 
-Logged in users can share videos 
+Logged in users can share videos
 <img src="client/src/screenshots/logged-in.jpg" alt="User logged in" />
 <img src="client/src/screenshots/share-page.jpg" alt="Image of share videos form" />
 
 Users can view videos.
 <img src="client/src/screenshots/video-item.jpg" alt="Image of video item" />
-
-
-
-
-
 
 <!-- CONTACT -->
 
@@ -147,13 +143,12 @@ Reem Bsrat - reembsrat@gmail.com
 
 Project Link: [https://github.com/Ree-m/youtube-url-app](https://github.com/Ree-m/youtube-url-app)
 
-
 <!-- ACKNOWLEDGMENTS -->
 
 ## Acknowledgments
 
 - [React Icons](https://react-icons.github.io/react-icons/search)
-
+- [YouTube Data API](https://developers.google.com/youtube/v3)
 
 [product-screenshot]: client/src/screenshots/youtube-url-home.jpg
 [node.js]: https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white
