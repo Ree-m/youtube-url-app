@@ -16,7 +16,7 @@ const initalState={
         email:"",
         id:""
     },
-    setUser:(user: User)=>{}
+    setUser:()=>{}
 } as UserContextInterface
 
 export const UserContext =createContext(initalState)
