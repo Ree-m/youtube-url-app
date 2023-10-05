@@ -11,7 +11,7 @@ const Header = () => {
     const { user, setUser } = useContext(UserContext)
     const [toggelMenu, setToggleMenu] = useState<boolean>(false)
 
-console.log("api url",API_URL)
+    console.log("api url", API_URL)
     useEffect(() => {
         const fetchProfileData = async () => {
             const response = await fetch(`${API_URL}/user/profile`, {
@@ -147,7 +147,7 @@ console.log("api url",API_URL)
 
                 </div>
 
-                
+
 
 
             </div>
