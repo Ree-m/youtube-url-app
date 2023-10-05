@@ -13,6 +13,7 @@ interface Video {
 }
 import { API_KEY } from "../Constants";
 import { API_URL } from "../Constants";
+console.log("api url",API_URL)
 
 const Home = () => {
   const [videos, setVideos] = useState<Video[]>([])

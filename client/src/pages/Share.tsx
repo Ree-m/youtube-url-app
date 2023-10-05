@@ -9,6 +9,7 @@ const Share = () => {
   const userId = user?.id
   const email = user?.email
 
+  // On form submit, add url to db
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (!userId) {
